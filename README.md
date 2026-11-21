@@ -38,3 +38,8 @@ Certificate SANs configured: `DNS:example.com`, `DNS:www.example.com`, `DNS:*.ex
 | `a.b.example.com` | **FAIL** | Wildcards (`*`) only match **one** subdomain level, not nested subdomains. |
 | `evil-example.com` | **FAIL** | Completely different domain; rejected immediately. |
 
+### 3. Live Local HTTPS Server & Client (`03-setup-certs.js` – `05-https-client.js`)
+* **Certificate Setup:** Generated persistent `localhost.key` and `localhost.crt` files inside the git-ignored `certs/` directory with SANs for `localhost` and `127.0.0.1`.
+* **TLS Handshake & Encryption:** Connected `05-https-client.js` to `04-https-server.js` on port `8443` using `localhost.crt` as the client's trusted CA (`HTTP 200`).
+* **Negotiated Protocol & Cipher:** `TLSv1.3` using **`TLS_AES_256_GCM_SHA384`**—demonstrating how asymmetric X.509 certificates authenticate the connection and then hand off bulk data encryption to symmetric **AES-256-GCM**.
+
