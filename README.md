@@ -52,3 +52,13 @@ Configured an mTLS server (`requestCert: true`, `rejectUnauthorized: true`) on p
 | **Rogue Self-Signed Cert** | **REJECTED** | `ECONNRESET` — rejected because the certificate was not signed by the trusted Root CA. |
 | **CA-Signed Client Cert** | **HTTP 200** | Authenticated client `CN=authorized-client-01` issued by `mTLS Internal Root CA`. |
 
+### 5. Asymmetric Signatures & ECDHE Key Exchange (`08-rsa-vs-ecdsa-signatures.js` – `09-ecdhe-key-exchange.js`)
+
+| Algorithm | KeyGen Time | Public Key Size | Key Takeaway |
+| :--- | :--- | :--- | :--- |
+| **RSA-2048** | `22.71ms` | `451 chars` | Widely compatible legacy/standard asymmetric algorithm; slower key generation and larger payloads. |
+| **ECDSA (P-256)** | `0.187ms` | `178 chars` | **~121x faster** key generation and **60% smaller** keys with equivalent security—ideal for mobile, IoT, and TLS 1.3. |
+
+* **Digital Signatures (`08-rsa-vs-ecdsa-signatures.js`):** Verified an authentic document (`true`) and immediately caught a 1-character modification (`false`) using an ECDSA SHA-256 signature.
+* **ECDHE + AES-256-GCM (`09-ecdhe-key-exchange.js`):** Simulated Alice and Bob deriving an identical shared secret over a public channel via Elliptic Curve Diffie-Hellman Ephemeral (ECDHE), stretching it with HKDF, and encrypting traffic with **AES-256-GCM**.
+
