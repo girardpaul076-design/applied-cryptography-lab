@@ -62,3 +62,8 @@ Configured an mTLS server (`requestCert: true`, `rejectUnauthorized: true`) on p
 * **Digital Signatures (`08-rsa-vs-ecdsa-signatures.js`):** Verified an authentic document (`true`) and immediately caught a 1-character modification (`false`) using an ECDSA SHA-256 signature.
 * **ECDHE + AES-256-GCM (`09-ecdhe-key-exchange.js`):** Simulated Alice and Bob deriving an identical shared secret over a public channel via Elliptic Curve Diffie-Hellman Ephemeral (ECDHE), stretching it with HKDF, and encrypting traffic with **AES-256-GCM**.
 
+### 6. Certificate Revocation Simulation (`10-cert-revocation.js`)
+Demonstrated why checking **CRL (Certificate Revocation List)** or **OCSP (Online Certificate Status Protocol)** status by **Serial Number** is critical:
+* `://example.com` (**Serial #1001**): Passed cryptographic signature verification and active revocation check (`[TRUSTED]`).
+* `://example.com` (**Serial #1002**): Cryptographic signature and expiration date were still valid, but connection was blocked (`[REVOKED]`) because Serial `#1002` was flagged for `keyCompromise`.
+
