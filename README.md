@@ -67,3 +67,12 @@ Demonstrated why checking **CRL (Certificate Revocation List)** or **OCSP (Onlin
 * `://example.com` (**Serial #1001**): Passed cryptographic signature verification and active revocation check (`[TRUSTED]`).
 * `://example.com` (**Serial #1002**): Cryptographic signature and expiration date were still valid, but connection was blocked (`[REVOKED]`) because Serial `#1002` was flagged for `keyCompromise`.
 
+### 7. Cryptographic Hashing, HMAC & Password Storage (`11-hashing-and-avalanche.js` – `13-password-salting-and-pbkdf2.js`)
+* **SHA-256 & Avalanche Effect (`11-hashing-and-avalanche.js`):** Verified that inputs ranging from 2 bytes to 1 MB always produce a fixed 64-character hex digest, and changing a single character (`$500.00` -> `$500.01`) completely scrambles ~95%+ of the output characters.
+* **HMAC-SHA256 Authentication (`12-hmac-message-auth.js`):** Demonstrated why plain hashes cannot prove authenticity, using a shared secret key and constant-time comparison (`crypto.timingSafeEqual`) to verify legitimate API webhooks and reject forged payloads.
+* **Salted Password Key Stretching (`13-password-salting-and-pbkdf2.js`):** Showed why unsalted SHA-256 exposes duplicate passwords, then implemented per-user random 16-byte salts combined with memory-hard `scrypt` key derivation (`WrongPass123` -> `false`, `Summer2026!` -> `true`).
+
+### 8. Hybrid Cryptography: Envelope Encryption & PGP Sign-then-Encrypt (`14-envelope-encryption.js` – `15-pgp-sign-and-encrypt.js`)
+* **Cloud KMS Envelope Encryption (`14-envelope-encryption.js`):** Encrypted payload data with a fast 256-bit symmetric **Data Encryption Key (DEK)** using **AES-256-GCM**, wrapped the DEK with an asymmetric **RSA-OAEP Key Encryption Key (KEK)**, and zeroed the plaintext DEK from memory.
+* **PGP-Style Sign-then-Encrypt (`15-pgp-sign-and-encrypt.js`):** Combined **ECDSA** digital signatures (authenticity + non-repudiation) with **ECDHE + AES-256-GCM** encryption (confidentiality) to securely transmit and verify an authorized message.
+
