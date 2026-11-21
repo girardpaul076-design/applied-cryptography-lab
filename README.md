@@ -76,3 +76,7 @@ Demonstrated why checking **CRL (Certificate Revocation List)** or **OCSP (Onlin
 * **Cloud KMS Envelope Encryption (`14-envelope-encryption.js`):** Encrypted payload data with a fast 256-bit symmetric **Data Encryption Key (DEK)** using **AES-256-GCM**, wrapped the DEK with an asymmetric **RSA-OAEP Key Encryption Key (KEK)**, and zeroed the plaintext DEK from memory.
 * **PGP-Style Sign-then-Encrypt (`15-pgp-sign-and-encrypt.js`):** Combined **ECDSA** digital signatures (authenticity + non-repudiation) with **ECDHE + AES-256-GCM** encryption (confidentiality) to securely transmit and verify an authorized message.
 
+### 9. Modern Auth Tokens & Post-Quantum Cryptography (`16-jwt-signing-and-tampering.js` – `18-post-quantum-mlkem.js`)
+* **JWT Signing & Tamper Detection (`16-jwt-signing-and-tampering.js`):** Issued an `HS256` token for `role: 'member'` (`valid: true`); attempting a privilege escalation edit to `role: 'admin'` immediately failed signature verification (`Invalid signature! Token was tampered with.`).
+* **TOTP 2FA Authenticator (`17-totp-2fa-authenticator.js`):** Implemented RFC 6238 30-second rotating 6-digit codes (`707538` -> `ACCESS GRANTED`, next window `196351`, invalid `000000` -> `DENIED`).
+* **Post-Quantum Key Encapsulation (`18-post-quantum-mlkem.js`):** Generated an `ML-KEM-768` quantum-resistant key pair, encapsulated a `1088`-byte ciphertext, and verified identical 256-bit derived secrets (`d589ed37...` -> `true`).
