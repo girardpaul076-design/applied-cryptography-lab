@@ -43,3 +43,12 @@ Certificate SANs configured: `DNS:example.com`, `DNS:www.example.com`, `DNS:*.ex
 * **TLS Handshake & Encryption:** Connected `05-https-client.js` to `04-https-server.js` on port `8443` using `localhost.crt` as the client's trusted CA (`HTTP 200`).
 * **Negotiated Protocol & Cipher:** `TLSv1.3` using **`TLS_AES_256_GCM_SHA384`**—demonstrating how asymmetric X.509 certificates authenticate the connection and then hand off bulk data encryption to symmetric **AES-256-GCM**.
 
+### 4. Mutual TLS (mTLS) Zero-Trust Authentication (`06-mtls-server.js` – `07-mtls-client.js`)
+Configured an mTLS server (`requestCert: true`, `rejectUnauthorized: true`) on port `8444` backed by a shared internal Root CA (`mTLS Internal Root CA`):
+
+| Client Attempt | Result | TLS Behavior |
+| :--- | :--- | :--- |
+| **No Client Certificate** | **REJECTED** | `ERR_SSL_TLSV13_ALERT_CERTIFICATE_REQUIRED` — dropped during TLS 1.3 handshake. |
+| **Rogue Self-Signed Cert** | **REJECTED** | `ECONNRESET` — rejected because the certificate was not signed by the trusted Root CA. |
+| **CA-Signed Client Cert** | **HTTP 200** | Authenticated client `CN=authorized-client-01` issued by `mTLS Internal Root CA`. |
+
